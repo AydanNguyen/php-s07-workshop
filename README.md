@@ -1,12 +1,12 @@
-# Workshop Booking Portal – PHPLab02
+# Workshop Booking Portal - PHPLab02
 
 Ứng dụng PHP thuần (không framework, không database) minh họa **GET, POST, Validation, Sanitization, Cookies & Sessions**.
 Dữ liệu booking được lưu trong PHP Session; catalog workshop nằm trong `data/workshops.php`.
 
 Phần mở rộng của Lab02:
 
-- **View Booking Detail** – `booking_detail.php?ref=BK-XXXXXX`
-- **Edit Booking** – `booking_edit.php?ref=BK-XXXXXX` (GET prefill + POST update)
+- **View Booking Detail** - `booking_detail.php?ref=BK-XXXXXX`
+- **Edit Booking** - `booking_edit.php?ref=BK-XXXXXX` (GET prefill + POST update)
 
 ## Yêu cầu
 
@@ -15,15 +15,15 @@ Phần mở rộng của Lab02:
 
 ## Cách chạy
 
-### Cách 1 – XAMPP
+### Cách 1 - XAMPP
 
 1. Đặt thư mục dự án vào `htdocs`:
    - macOS: `/Applications/XAMPP/xamppfiles/htdocs/php-s07-workshop`
    - Windows: `C:\xampp\htdocs\php-s07-workshop`
-2. Mở XAMPP Control Panel → **Start Apache**.
+2. Mở XAMPP Control Panel -> **Start Apache**.
 3. Truy cập: <http://localhost/php-s07-workshop/>
 
-### Cách 2 – PHP built-in server
+### Cách 2 - PHP built-in server
 
 ```bash
 cd php-s07-workshop
@@ -36,23 +36,23 @@ Truy cập: <http://localhost:8000/>
 
 ```
 php-s07-workshop/
-├── index.php            # Catalog: search (q) + filter (category) qua GET, form đổi theme
-├── booking.php          # Form đặt chỗ: GET hiển thị, POST validate + lưu Session (PRG)
-├── dashboard.php        # Danh sách booking trong Session + View Details / Edit
-├── booking_detail.php   # [Lab02] Xem chi tiết booking theo ref (GET, chỉ đọc)
-├── booking_edit.php     # [Lab02] Sửa booking: GET prefill, POST + CSRF + validate + 303
-├── preference.php       # POST lưu cookie theme light/dark
-├── logout.php           # POST xóa Session (Clear session & start over)
-├── request_demo.php     # So sánh $_GET, $_POST, $_REQUEST
-├── lib/
-│   ├── bootstrap.php    # session_start, CSRF token, nạp catalog, đọc cookie theme
-│   ├── functions.php    # e(), normalize_text(), validate_booking(), csrf_valid(),
-│   │                    # redirect_to(), find_booking_index(), booking_workshop()
-│   └── workshops.php
-├── data/
-│   └── workshops.php    # Catalog 3 workshop (id, title, category, fee, seats)
-└── assets/
-    └── style.css
+|-- index.php            # Catalog: search (q) + filter (category) qua GET, form đổi theme
+|-- booking.php          # Form đặt chỗ: GET hiển thị, POST validate + lưu Session (PRG)
+|-- dashboard.php        # Danh sách booking trong Session + View Details / Edit
+|-- booking_detail.php   # [Lab02] Xem chi tiết booking theo ref (GET, chỉ đọc)
+|-- booking_edit.php     # [Lab02] Sửa booking: GET prefill, POST + CSRF + validate + 303
+|-- preference.php       # POST lưu cookie theme light/dark
+|-- logout.php           # POST xóa Session (Clear session & start over)
+|-- request_demo.php     # So sánh $_GET, $_POST, $_REQUEST
+|-- lib/
+|   |-- bootstrap.php    # session_start, CSRF token, nạp catalog, đọc cookie theme
+|   |-- functions.php    # e(), normalize_text(), validate_booking(), csrf_valid(),
+|   |                    # redirect_to(), find_booking_index(), booking_workshop()
+|   `-- workshops.php
+|-- data/
+|   `-- workshops.php    # Catalog 3 workshop (id, title, category, fee, seats)
+`-- assets/
+    `-- style.css
 ```
 
 ## Các route chính
@@ -71,17 +71,17 @@ php-s07-workshop/
 
 ## Quy tắc nghiệp vụ & bảo mật
 
-- **Validation phía server** (`validate_booking()`): họ tên bắt buộc, 2–120 bytes; email hợp lệ (`FILTER_VALIDATE_EMAIL`); số vé là số nguyên 1–4 (`FILTER_VALIDATE_INT`) và không vượt `seats`; workshop phải tồn tại trong catalog.
+- **Validation phía server** (`validate_booking()`): họ tên bắt buộc, 2-120 bytes; email hợp lệ (`FILTER_VALIDATE_EMAIL`); số vé là số nguyên 1-4 (`FILTER_VALIDATE_INT`) và không vượt `seats`; workshop phải tồn tại trong catalog.
 - **Sanitization & output escaping**: `normalize_text()` làm sạch input; mọi dữ liệu xuất ra HTML đi qua `e()` (`htmlspecialchars` + `ENT_QUOTES` + UTF-8).
-- **CSRF**: mọi form POST có `csrf_token`, kiểm tra bằng `hash_equals()`; sai/thiếu token → HTTP 403.
+- **CSRF**: mọi form POST có `csrf_token`, kiểm tra bằng `hash_equals()`; sai/thiếu token -> HTTP 403.
 - **POST/Redirect/GET**: sau POST luôn redirect HTTP 303, refresh không gửi lại form.
-- **View Detail**: chỉ đọc Session, không thay đổi dữ liệu; `ref` thiếu/không tồn tại → 404 “Booking not found”, không warning.
+- **View Detail**: chỉ đọc Session, không thay đổi dữ liệu; `ref` thiếu/không tồn tại -> 404 "Booking not found", không warning.
 - **Edit Booking**:
   - Chỉ cho sửa Full Name, Email, Tickets; `ref` và workshop không sửa được.
   - `workshop_id` và đơn giá luôn lấy từ catalog server; các field `price`, `total`, `workshop_id` do client gửi đều bị bỏ qua.
-  - `amount = fee (server) × quantity (đã validate)`.
+  - `amount = fee (server) x quantity (đã validate)`.
   - Dữ liệu sai: hiển thị lỗi cạnh field, giữ giá trị vừa nhập, Session không thay đổi.
-  - Chỉ cập nhật đúng booking theo `ref`; `ref` không tồn tại → 404, không tạo/sửa booking khác.
+  - Chỉ cập nhật đúng booking theo `ref`; `ref` không tồn tại -> 404, không tạo/sửa booking khác.
 - **Cookie vs Session**: theme lưu trong cookie (30 ngày) nên vẫn còn sau khi Clear Session; booking chỉ tồn tại trong Session.
 
 ## Kịch bản kiểm thử nhanh
@@ -89,8 +89,8 @@ php-s07-workshop/
 | ID | Thao tác | Kết quả mong đợi |
 |---|---|---|
 | T01 | View ref hợp lệ | Hiện đúng bản ghi |
-| T02 | View ref không tồn tại / thiếu ref | “Booking not found”, không warning |
-| T03 | Edit tickets 2 → 3 | Amount tính lại đúng (vd. 450,000 × 3 = 1,350,000) |
+| T02 | View ref không tồn tại / thiếu ref | "Booking not found", không warning |
+| T03 | Edit tickets 2 -> 3 | Amount tính lại đúng (vd. 450,000 x 3 = 1,350,000) |
 | T04 | Edit email sai | Báo lỗi, Session không đổi |
 | T05 | Edit tickets 0, 5, 1.5 | Đều bị từ chối |
 | T06 | POST thiếu/sai CSRF | HTTP 403 |
@@ -106,6 +106,5 @@ php-s07-workshop/
 
 ## Thông tin sinh viên
 
-- Họ tên: `...`
-- MSSV: `...`
-- Lớp: `...`
+- Họ tên: `Nguyễn Hoàng Long`
+- MSSV: `23110099`
